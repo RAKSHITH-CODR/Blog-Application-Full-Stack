@@ -49,7 +49,7 @@ const Navbar = () => {
 
     const logoutHandler = async (e) => {
         try {
-            const res = await axios.get(`https://blog-application-full-stack.onrender.com/user/logout`, { withCredentials: true })
+            const res = await axios.get(`https://blog-application-full-stack.onrender.com/api/v1/user/logout`, { withCredentials: true })
             if (res.data.success) {
                 navigate('/login')
                 dispatch(setUser(null))

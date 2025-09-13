@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({extended: true}));
 app.use(cors({
-    origin: "https://blog-application-full-stack.onrender.com",
+    origin: "https://blog-application-full-stack.onrender.com/api/v1",
     credentials:true
 }))
 
