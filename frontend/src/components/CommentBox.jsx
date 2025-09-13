@@ -35,7 +35,7 @@ const CommentBox = ({ selectedBlog }) => {
 
     const commentSubmit = async () => {
         try {
-            const res = await axios.post(`http://localhost:8000/api/v1/comment/${selectedBlog?._id}/create`, { content }, {
+            const res = await axios.post(`https://blog-application-full-stack.onrender.com/comment/${selectedBlog?._id}/create`, { content }, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -64,7 +64,7 @@ const CommentBox = ({ selectedBlog }) => {
 
     const deleteComment = async (commentId) => {
         try {
-            const res = await axios.delete(`http://localhost:8000/api/v1/comment/${commentId}/delete`, { withCredentials: true })
+            const res = await axios.delete(`https://blog-application-full-stack.onrender.com/comment/${commentId}/delete`, { withCredentials: true })
             if (res.data.success) {
                 const updatedCommentData = comment.filter((item) => item._id !== commentId);
                 dispatch(setComment(updatedCommentData));
@@ -78,7 +78,7 @@ const CommentBox = ({ selectedBlog }) => {
 
     const editCommentSubmit = async (commentId) => {
         try {
-            const res = await axios.put(`http://localhost:8000/api/v1/comment/${commentId}/edit`, { content: editedContent }, {
+            const res = await axios.put(`https://blog-application-full-stack.onrender.com/comment/${commentId}/edit`, { content: editedContent }, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -99,7 +99,7 @@ const CommentBox = ({ selectedBlog }) => {
 
     const likeComment = async (commentId) => {
         try {
-            const res = await axios.get(`http://localhost:8000/api/v1/comment/${commentId}/like`, { withCredentials: true });
+            const res = await axios.get(`https://blog-application-full-stack.onrender.com/comment/${commentId}/like`, { withCredentials: true });
             if (res.data.success) {
                 const updatedComment = res.data.updatedComment;
                 const updatedCommentData = comment.map((item) => item._id === commentId ? updatedComment : item);
@@ -114,7 +114,7 @@ const CommentBox = ({ selectedBlog }) => {
 
     const handleReply = async (commentId) => {
         try {
-            const res = await axios.post(`http://localhost:8000/api/v1/comment/${commentId}/reply`, { content }, { withCredentials: true });
+            const res = await axios.post(`https://blog-application-full-stack.onrender.com/comment/${commentId}/reply`, { content }, { withCredentials: true });
             if (res.data.success) {
                 const updatedCommentData = comment.map((item) => item._id === commentId ? res.data.updatedComment : item);
                 dispatch(setComment(updatedCommentData));
@@ -131,7 +131,7 @@ const CommentBox = ({ selectedBlog }) => {
     useEffect(() => {
         const getAllComments = async () => {
             try {
-                const res = await axios.get(`http://localhost:8000/api/v1/comment/${selectedBlog?._id}/comment/all`)
+                const res = await axios.get(`https://blog-application-full-stack.onrender.com/comment/${selectedBlog?._id}/comment/all`)
                 const data = res.data.comments;
                 dispatch(setComment(data));
             } catch (error) {
