@@ -19,7 +19,7 @@ import SearchList from "./pages/SearchList";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />, // Navbar + Footer
+    element: <Layout />,
     children: [
       { index: true, element: <Home /> },
       { path: "about", element: <About /> },
@@ -30,10 +30,10 @@ const router = createBrowserRouter([
   },
   {
     path: "dashboard",
-    element: <DashboardLayout />, // Navbar only
+    element: <DashboardLayout />,
     children: [
       {
-        element: <Dashboard />, // Sidebar + Outlet
+        element: <Dashboard />, 
         children: [
           { index: true, element: <Profile /> },
           { path: "profile", element: <Profile /> },
@@ -45,8 +45,16 @@ const router = createBrowserRouter([
       },
     ],
   },
-  { path: "/login", element: <Login /> },
-  { path: "/signup", element: <Signup /> },
+  {
+    path: "/login",
+    element: <Layout footer={false} />,
+    children: [{ index: true, element: <Login /> }],
+  },
+  {
+    path: "/signup",
+    element: <Layout footer={false} />,
+    children: [{ index: true, element: <Signup /> }],
+  },
 ]);
 
 const App = () => {
