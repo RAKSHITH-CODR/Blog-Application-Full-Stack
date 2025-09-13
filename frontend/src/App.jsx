@@ -1,0 +1,56 @@
+import React from "react";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Layout from "./components/Layout"; 
+import DashboardLayout from "./components/DashboardLayout"; 
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import Blogs from "./pages/Blogs";
+import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
+import YourBlog from "./pages/YourBlog";
+import Comments from "./pages/Comments";
+import CreateBlog from "./pages/CreateBlog";
+import UpdateBlog from "./pages/UpdateBlog";
+import BlogView from "./pages/BlogView";
+import SearchList from "./pages/SearchList";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Layout />, // Navbar + Footer
+    children: [
+      { index: true, element: <Home /> },
+      { path: "about", element: <About /> },
+      { path: "blogs", element: <Blogs /> },
+      { path: "search", element: <SearchList /> },
+      { path: "blogs/:blogId", element: <BlogView /> },
+    ],
+  },
+  {
+    path: "dashboard",
+    element: <DashboardLayout />, // Navbar only
+    children: [
+      {
+        element: <Dashboard />, // Sidebar + Outlet
+        children: [
+          { index: true, element: <Profile /> },
+          { path: "profile", element: <Profile /> },
+          { path: "your-blog", element: <YourBlog /> },
+          { path: "comments", element: <Comments /> },
+          { path: "write-blog", element: <CreateBlog /> },
+          { path: "write-blog/:blogId", element: <UpdateBlog /> },
+        ],
+      },
+    ],
+  },
+  { path: "/login", element: <Login /> },
+  { path: "/signup", element: <Signup /> },
+]);
+
+const App = () => {
+  return <RouterProvider router={router} />;
+};
+
+export default App;
