@@ -26,8 +26,8 @@ const BlogView = () => {
     const { user } = useSelector(store => store.auth);
     const { blog } = useSelector(store => store.blog);
     const selectedBlog = blog.find(blog => blog._id === blogId)
-    const [ blogLike, setBlogLike ] = useState(selectedBlog?.likes?.length || 0);
-    const [ liked, setLiked ] = useState(selectedBlog.likes?.includes(user._id) || false)
+    const [blogLike, setBlogLike] = useState(selectedBlog?.likes?.length || 0);
+    const [liked, setLiked] = useState(selectedBlog.likes?.includes(user._id) || false)
 
     const changeTimeFormat = (isDate) => {
         const date = new Date(isDate);
@@ -54,6 +54,10 @@ const BlogView = () => {
     }
 
     const likeOrDislikeHandler = async () => {
+        if (!user) {
+            toast.error("You must be logged in to like blogs");
+            return;
+        }
         try {
             const action = liked ? 'dislike' : 'like';
             const res = await axios.get(`https://blog-application-full-stack.onrender.com/api/v1/blog/${selectedBlog?._id}/${action}`,
@@ -76,9 +80,37 @@ const BlogView = () => {
         }
     }
 
-    useEffect(()=>{
-        window.scrollTo(0,0);
-    },[])
+    useEffect(() => {
+        const fetchBlog = async () => {
+            try {
+                const res = await axios.get(
+                    `https://blog-application-full-stack.onrender.com/api/v1/blog/get-published-blog/${blogId}`
+                );
+                if (res.data.success) {
+                    setSelectedBlog(res.data.blog);
+                    setBlogLike(res.data.blog.likes?.length || 0);
+                    if (user) {
+                        setLiked(res.data.blog.likes?.includes(user._id));
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+                toast.error("Failed to fetch blog");
+            }
+        };
+
+        // Try Redux first
+        const fromRedux = blog?.find(b => b._id === blogId);
+        if (fromRedux) {
+            setSelectedBlog(fromRedux);
+            setBlogLike(fromRedux.likes?.length || 0);
+            if (user) setLiked(fromRedux.likes?.includes(user._id));
+        } else {
+            fetchBlog();
+        }
+
+        window.scrollTo(0, 0);
+    }, [blogId, blog, user]);
 
     return (
         <div className='pt-14'>
@@ -140,8 +172,8 @@ const BlogView = () => {
                         <div className="flex items-center space-x-4">
                             <div onClick={likeOrDislikeHandler} variant="ghost" className="flex items-center gap-1 cursor-pointer">
                                 {
-                                    liked ? <FaHeart className='cursor-pointer text-red-600'/> : 
-                                    <FaRegHeart className='cursor-pointer hover:text-gray-600 dark:text-white' />
+                                    liked ? <FaHeart className='cursor-pointer text-red-600' /> :
+                                        <FaRegHeart className='cursor-pointer hover:text-gray-600 dark:text-white' />
                                 }
                                 <span>{blogLike}</span>
                             </div>

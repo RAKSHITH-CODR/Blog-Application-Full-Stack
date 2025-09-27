@@ -246,3 +246,29 @@ export const getMyTotalLikes = async (req, res) => {
         })
     }
 }
+
+export const getSinglePublishedBlog = async (req, res) => {
+    try {
+        const { blogId } = req.params;
+        const blog = await Blog.findOne({ _id: blogId, isPublished: true })
+            .populate({ path: "author", select: "firstName lastName photoUrl occupation" });
+
+        if (!blog) {    
+            return res.status(404).json({
+                success: false,
+                message: "Blog not found or not published",
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            blog,
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to fetch blog",
+        });
+    }
+};
