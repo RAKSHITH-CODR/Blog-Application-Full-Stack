@@ -1,7 +1,7 @@
 import RecentBlog from '@/components/RecentBlog'
-import Hero from '../components/Hero'
 import React, { useRef } from 'react'
 import PopularAuthors from '@/components/PopularAuthors'
+import Hero from '@/components/Hero'
 
 const Home = () => {
   // const recentBlogRef = useRef(null)
@@ -12,7 +12,7 @@ const Home = () => {
 
   return (
     <div className='pt-20'>
-      <Hero />
+        <Hero />
         <RecentBlog />
       <PopularAuthors />
     </div>

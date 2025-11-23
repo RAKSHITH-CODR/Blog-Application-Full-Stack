@@ -1,12 +1,12 @@
 import { setBlog } from '@/redux/blogSlice';
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import BlogCardList from './BlogCardList';
 import { Badge } from './ui/badge';
 import axios from 'axios';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { useNavigate } from 'react-router-dom';
+import BlogCardList from './BlogCardList';
 
 const RecentBlog = () => {
     const dispatch = useDispatch();

@@ -28,6 +28,7 @@ const router = createBrowserRouter([
       { path: "blogs/:blogId", element: <BlogView /> },
     ],
   },
+  
   {
     path: "dashboard",
     element: <DashboardLayout />,

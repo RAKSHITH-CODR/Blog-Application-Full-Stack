@@ -26,6 +26,7 @@ const BlogView = () => {
     const { user } = useSelector(store => store.auth);
     const { blog } = useSelector(store => store.blog);
     const selectedBlog = blog.find(blog => blog._id === blogId)
+    const [selectedBlogState, setSelectedBlog] = useState(selectedBlog || null);
     const [blogLike, setBlogLike] = useState(selectedBlog?.likes?.length || 0);
     const [liked, setLiked] = useState(selectedBlog.likes?.includes(user._id) || false)
 
@@ -87,6 +88,7 @@ const BlogView = () => {
                     `https://blog-application-full-stack.onrender.com/api/v1/blog/get-published-blog/${blogId}`
                 );
                 if (res.data.success) {
+                    selectedBlog && dispatch(setBlog([...blog, res.data.blog]));
                     setSelectedBlog(res.data.blog);
                     setBlogLike(res.data.blog.likes?.length || 0);
                     if (user) {
