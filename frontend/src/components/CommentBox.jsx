@@ -34,8 +34,16 @@ const CommentBox = ({ selectedBlog }) => {
     }
 
     const commentSubmit = async () => {
+        if (!user) {
+            toast.error("You must be logged in to comment");
+            return;
+        }
+        if (!content.trim()) {
+            toast.error("Comment cannot be empty");
+            return;
+        }
         try {
-            const res = await axios.post(`https://blog-application-full-stack.onrender.com/api/v1/comment/${selectedBlog?._id}/create`, { content }, {
+            const res = await axios.post(`http://localhost:3000/api/v1/comment/${selectedBlog?._id}/create`, { content }, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -64,7 +72,7 @@ const CommentBox = ({ selectedBlog }) => {
 
     const deleteComment = async (commentId) => {
         try {
-            const res = await axios.delete(`https://blog-application-full-stack.onrender.com/api/v1/comment/${commentId}/delete`, { withCredentials: true })
+            const res = await axios.delete(`http://localhost:3000/api/v1/comment/${commentId}/delete`, { withCredentials: true })
             if (res.data.success) {
                 const updatedCommentData = comment.filter((item) => item._id !== commentId);
                 dispatch(setComment(updatedCommentData));
@@ -78,7 +86,7 @@ const CommentBox = ({ selectedBlog }) => {
 
     const editCommentSubmit = async (commentId) => {
         try {
-            const res = await axios.put(`https://blog-application-full-stack.onrender.com/api/v1/comment/${commentId}/edit`, { content: editedContent }, {
+            const res = await axios.put(`http://localhost:3000/api/v1/comment/${commentId}/edit`, { content: editedContent }, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -103,7 +111,7 @@ const CommentBox = ({ selectedBlog }) => {
             return;
         }
         try {
-            const res = await axios.get(`https://blog-application-full-stack.onrender.com/api/v1/comment/${commentId}/like`, { withCredentials: true });
+            const res = await axios.get(`http://localhost:3000/api/v1/comment/${commentId}/like`, { withCredentials: true });
             if (res.data.success) {
                 const updatedComment = res.data.updatedComment;
                 const updatedCommentData = comment.map((item) => item._id === commentId ? updatedComment : item);
@@ -118,7 +126,7 @@ const CommentBox = ({ selectedBlog }) => {
 
     const handleReply = async (commentId) => {
         try {
-            const res = await axios.post(`https://blog-application-full-stack.onrender.com/api/v1/comment/${commentId}/reply`, { content }, { withCredentials: true });
+            const res = await axios.post(`http://localhost:3000/api/v1/comment/${commentId}/reply`, { content }, { withCredentials: true });
             if (res.data.success) {
                 const updatedCommentData = comment.map((item) => item._id === commentId ? res.data.updatedComment : item);
                 dispatch(setComment(updatedCommentData));
@@ -135,7 +143,7 @@ const CommentBox = ({ selectedBlog }) => {
     useEffect(() => {
         const getAllComments = async () => {
             try {
-                const res = await axios.get(`https://blog-application-full-stack.onrender.com/api/v1/comment/${selectedBlog?._id}/comment/all`)
+                const res = await axios.get(`http://localhost:3000/api/v1/comment/${selectedBlog?._id}/comment/all`)
                 const data = res.data.comments;
                 dispatch(setComment(data));
             } catch (error) {
@@ -147,26 +155,37 @@ const CommentBox = ({ selectedBlog }) => {
     }, [selectedBlog])
     return (
         <div>
-            <div className='flex gap-4 mb-4 items-center'>
-                <Avatar>
-                    <AvatarImage src={user.photoUrl} alt={user.name} className="object-cover" />
-                    <AvatarFallback>
-                        {user.firstName.charAt(0)}{user.lastName.charAt(0)}
-                    </AvatarFallback>
-                </Avatar>
-                <h3 className='font-semibold'>{user.firstName} {user.lastName}</h3>
-            </div>
-            <div className="flex gap-3">
-                <Textarea
-                    placeholder="Leave a comment..."
-                    className="bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600"
-                    value={content}
-                    onChange={changeEventHandler}
-                />
-                <Button onClick={commentSubmit} className="mt-3 cursor-pointer">
-                    <LuSend />
-                </Button>
-            </div>
+            {/* Only show comment form if user is logged in */}
+            {user ? (
+                <>
+                    <div className='flex gap-4 mb-4 items-center'>
+                        <Avatar>
+                            <AvatarImage src={user?.photoUrl} alt={user?.name} className="object-cover" />
+                            <AvatarFallback>
+                                {user?.firstName?.charAt(0)}{user?.lastName?.charAt(0)}
+                            </AvatarFallback>
+                        </Avatar>
+                        <h3 className='font-semibold'>{user?.firstName} {user?.lastName}</h3>
+                    </div>
+                    <div className="flex gap-3">
+                        <Textarea
+                            placeholder="Leave a comment..."
+                            className="bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-600"
+                            value={content}
+                            onChange={changeEventHandler}
+                        />
+                        <Button onClick={commentSubmit} className="mt-3 cursor-pointer">
+                            <LuSend />
+                        </Button>
+                    </div>
+                </>
+            ) : (
+                <div className="text-center p-4 bg-gray-100 dark:bg-gray-800 rounded-md mb-6">
+                    <p className="text-gray-600 dark:text-gray-400">
+                        Please <a href="/login" className="text-blue-600 hover:underline">login</a> to leave a comment
+                    </p>
+                </div>
+            )}
             {
                 comment?.length > 0 ? <div className='mt-7 bg-gray-100 dark:bg-gray-800 p-5 rounded-md'>
                     {

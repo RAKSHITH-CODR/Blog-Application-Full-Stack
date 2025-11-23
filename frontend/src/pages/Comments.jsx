@@ -11,7 +11,7 @@ const Comments = () => {
 
   const getTotalComments = async () => {
     try {
-      const res = await axios.get(`https://blog-application-full-stack.onrender.com/api/v1/comment/my-blogs/comments`, { withCredentials: true });
+      const res = await axios.get(`http://localhost:3000/api/v1/comment/my-blogs/comments`, { withCredentials: true });
       if (res.data.success) {
         setAllComments(res.data.comments);
       }

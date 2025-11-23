@@ -61,7 +61,7 @@ const BlogView = () => {
         }
         try {
             const action = liked ? 'dislike' : 'like';
-            const res = await axios.get(`https://blog-application-full-stack.onrender.com/api/v1/blog/${selectedBlog?._id}/${action}`,
+            const res = await axios.get(`http://localhost:3000/api/v1/blog/${selectedBlog?._id}/${action}`,
                 { withCredentials: true })
             if (res.data.success) {
                 const updatedLikes = liked ? blogLike - 1 : blogLike + 1;
@@ -85,7 +85,7 @@ const BlogView = () => {
         const fetchBlog = async () => {
             try {
                 const res = await axios.get(
-                    `https://blog-application-full-stack.onrender.com/api/v1/blog/get-published-blog/${blogId}`
+                    `http://localhost:3000/api/v1/blog/get-published-blog/${blogId}`
                 );
                 if (res.data.success) {
                     selectedBlog && dispatch(setBlog([...blog, res.data.blog]));

@@ -12,7 +12,7 @@ const Blogs = () => {
 
     const getAllPublishedBlogs = async () =>{
       try {
-        const res = await axios.get(`https://blog-application-full-stack.onrender.com/api/v1/blog/get-published-blogs`, {withCredentials: true})
+        const res = await axios.get(`http://localhost:3000/api/v1/blog/get-published-blogs`, {withCredentials: true})
         if(res.data.success){
           dispatch(setBlog(res.data.blogs));
         }

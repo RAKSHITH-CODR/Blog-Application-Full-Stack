@@ -66,6 +66,7 @@ export const login = async (req, res) => {
       });
     }
     let user = await User.findOne({ email: email });
+    console.log("USER ===>", user);
     if (!user) {
       return res.status(400).json({
         success: false,
@@ -73,6 +74,7 @@ export const login = async (req, res) => {
       });
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
+    console.log("IS PASSWORD VALID ===>", isPasswordValid);
     if (!isPasswordValid) {
       return res.status(400).json({
         success: false,
@@ -80,9 +82,10 @@ export const login = async (req, res) => {
       });
     }
 
-    const token = await jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
+    const token = await jwt.sign({ userId: user._id }, "rakanu34u0q32kqwndkczsc", {
       expiresIn: "1d",
     });
+    console.log("TOKEN ===>", token);
     return res
       .status(200)
       .cookie("token", token, {
