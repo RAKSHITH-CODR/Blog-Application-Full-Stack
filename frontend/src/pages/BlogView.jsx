@@ -28,7 +28,7 @@ const BlogView = () => {
     const selectedBlog = blog.find(blog => blog._id === blogId)
     const [selectedBlogState, setSelectedBlog] = useState(selectedBlog || null);
     const [blogLike, setBlogLike] = useState(selectedBlog?.likes?.length || 0);
-    const [liked, setLiked] = useState(selectedBlog.likes?.includes(user._id) || false)
+    const [liked, setLiked] = useState(user && selectedBlog?.likes?.includes(user._id) || false)
 
     const changeTimeFormat = (isDate) => {
         const date = new Date(isDate);

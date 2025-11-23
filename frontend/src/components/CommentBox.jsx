@@ -98,6 +98,10 @@ const CommentBox = ({ selectedBlog }) => {
     }
 
     const likeComment = async (commentId) => {
+        if (!user) {
+            toast.error("You must be logged in to like comments");
+            return;
+        }
         try {
             const res = await axios.get(`https://blog-application-full-stack.onrender.com/api/v1/comment/${commentId}/like`, { withCredentials: true });
             if (res.data.success) {
@@ -197,7 +201,7 @@ const CommentBox = ({ selectedBlog }) => {
                                                 <div className="flex gap-2 items-center">
                                                     <div onClick={() => likeComment(item._id)} className="flex gap-1 items-center cursor-pointer">
                                                         {
-                                                            item.likes.includes(user._id) ? <FaHeart className='cursor-pointer text-red-600' /> :
+                                                            user && item.likes.includes(user._id) ? <FaHeart className='cursor-pointer text-red-600' /> :
                                                                 <FaRegHeart className='cursor-pointer hover:text-gray-600 dark:text-white' />
                                                         }
                                                         <span>{item?.numberOfLikes}</span>
@@ -208,7 +212,7 @@ const CommentBox = ({ selectedBlog }) => {
                                         </div>
                                     </div>
                                     {
-                                        user._id === item?.userId?._id ?
+                                        user && user._id === item?.userId?._id ?
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger className="cursor-pointer">
                                                     <BsThreeDotsVertical />
