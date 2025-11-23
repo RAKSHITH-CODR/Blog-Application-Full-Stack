@@ -16,7 +16,7 @@ export const isAuthenticated = (req, res, next) => {
                 success: false
             })
         }
-        req.id = decode.userId;
+        req.id = decode.userId; 
         next();
     } catch (error) {
         console.log(error);
